@@ -24,7 +24,7 @@ pipeline {
                   sh "ls"
                   sh "kubectl get pods"
                   sh "kubectl create deployment nginx --image=nginx"
-                  sh "kubectl expose deployment nginx --type=80 --type=NodePort"
+                  sh "kubectl expose deployment nginx --port=80 --type=NodePort"
                   
                  }
             }
