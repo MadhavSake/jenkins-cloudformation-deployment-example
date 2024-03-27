@@ -20,7 +20,7 @@ pipeline {
             steps {
               ansiColor('xterm') {
                 container("jenkins-agent") {
-                  sh "kubectl apply -f app"
+                  sh "kubectl apply -f deployment.yaml"
                   
                  }
             }
