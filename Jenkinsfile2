@@ -33,6 +33,8 @@ pipeline {
             steps {
                 script {
                     // Apply Kubernetes manifests
+                    sh "kubectl create deployment nginx --image=nginx"
+                    sh "kubectl expose deployment nginx --type=80 --type=NodePort"
                     sh "kubectl apply -f deployment.yaml"
                 }
             }
