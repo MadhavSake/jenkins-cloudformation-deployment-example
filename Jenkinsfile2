@@ -16,12 +16,21 @@ pipeline {
                           userRemoteConfigs: [[url: 'https://github.com/MadhavSake/jenkins-cloudformation-deployment-example.git']]])
             }
         }
+         stage('check version') {
+            steps {
+              ansiColor('xterm') {
+                container("jenkins-agent") {
+                  sh "kubectl apply get pods"
+                  
+                 }
+            }
+        }
+    }
+
          stage('Deploy to EKS Cluster') {
             steps {
                 script {
                     // Apply Kubernetes manifests
-                    sh "ls"
-                    sh "pwd"
                     sh "kubectl apply -f deployment.yaml"
                 }
             }
