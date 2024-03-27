@@ -20,6 +20,8 @@ pipeline {
             steps {
               ansiColor('xterm') {
                 container("jenkins-agent") {
+                  sh "pwd"
+                  sh "ls"
                   sh "kubectl get pods"
                   
                  }
