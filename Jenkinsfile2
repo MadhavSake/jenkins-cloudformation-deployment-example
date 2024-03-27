@@ -21,6 +21,7 @@ pipeline {
               ansiColor('xterm') {
                 container("jenkins-agent") {
                   sh "ls"
+                  sh "pwd"
                   sh "kubectl apply -f deployment.yaml"
                   
                  }
