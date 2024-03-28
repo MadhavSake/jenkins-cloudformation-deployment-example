@@ -29,7 +29,6 @@ pipeline {
                         sh "kubectl apply -f jenkins-cloudformation-deployment-example/deployment.yaml"
                         sh "kubectl create deployment nginx --image=nginx"
                         sh "kubectl expose deployment nginx --port=80 --type=NodePort"
-                        sh "kubectl apply -f deployment.yaml"
                     }
                 }
             }
