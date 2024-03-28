@@ -11,19 +11,21 @@ pipeline {
                 checkout([$class: 'GitSCM', 
                           branches: [[name: '*/main']],
                           doGenerateSubmoduleConfigurations: false,
-                          extensions: [[$class: 'SparseCheckoutPaths',  sparseCheckoutPaths: [[path: 'k8sPodTemplate.yaml']]]],
+                          extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'k8sPodTemplate.yaml']]]],
                           submoduleCfg: [],
                           userRemoteConfigs: [[url: 'https://github.com/MadhavSake/jenkins-cloudformation-deployment-example.git']]])
             }
         }
-         stage('Deploy to EKS Cluster') {
+        
+        stage('Deploy to EKS Cluster') {
             steps {
                 ansiColor ('xterm') {
-                  container("jenkins-agent") {
-                    // Apply Kubernetes manifests
-                    sh "kubectl create deployment nginx --image=nginx"
-                    sh "kubectl expose deployment nginx --type=80 --type=NodePort"
-                    sh "kubectl apply -f deployment.yaml"
+                    container("jenkins-agent") {
+                        // Apply Kubernetes manifests
+                        sh "kubectl create deployment nginx --image=nginx"
+                        sh "kubectl expose deployment nginx --type=80 --type=NodePort"
+                        sh "kubectl apply -f deployment.yaml"
+                    }
                 }
             }
         }
@@ -35,5 +37,4 @@ pipeline {
             // Add notification steps here
         }
     }
-}
 }
