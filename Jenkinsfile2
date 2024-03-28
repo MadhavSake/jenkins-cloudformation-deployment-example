@@ -8,12 +8,15 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
+                container("jenkins-agent") {
+                    sh "git clone https://github.com/MadhavSake/jenkins-cloudformation-deployment-example.git"
                 checkout([$class: 'GitSCM', 
                           branches: [[name: '*/main']],
                           doGenerateSubmoduleConfigurations: false,
                           extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'k8sPodTemplate.yaml']]]],
                           submoduleCfg: [],
                           userRemoteConfigs: [[url: 'https://github.com/MadhavSake/jenkins-cloudformation-deployment-example.git']]])
+            }
             }
         }
         
@@ -22,7 +25,8 @@ pipeline {
                 ansiColor ('xterm') {
                     container("jenkins-agent") {
                         // Apply Kubernetes manifests
-                        sh "kubectl apply -f deployment.yaml"
+                        sh "ls"
+                        sh "kubectl apply -f jenkins-cloudformation-deployment-example/deployment.yaml"
                         sh "kubectl create deployment nginx --image=nginx"
                         sh "kubectl expose deployment nginx --type=80 --type=NodePort"
                         sh "kubectl apply -f deployment.yaml"
