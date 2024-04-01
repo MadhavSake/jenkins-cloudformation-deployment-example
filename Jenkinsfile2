@@ -10,40 +10,40 @@ pipeline {
             steps {
                 container("jenkins-agent") {
                     sh "git clone https://github.com/MadhavSake/jenkins-cloudformation-deployment-example.git"
-                checkout([$class: 'GitSCM', 
-                          branches: [[name: '*/main']],
-                          doGenerateSubmoduleConfigurations: false,
-                          extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'k8sPodTemplate.yaml']]]],
-                          submoduleCfg: [],
-                          userRemoteConfigs: [[url: 'https://github.com/MadhavSake/jenkins-cloudformation-deployment-example.git']]])
-            }
+                    checkout([$class: 'GitSCM', 
+                              branches: [[name: '*/main']],
+                              doGenerateSubmoduleConfigurations: false,
+                              extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'k8sPodTemplate.yaml']]]],
+                              submoduleCfg: [],
+                              userRemoteConfigs: [[url: 'https://github.com/MadhavSake/jenkins-cloudformation-deployment-example.git']]])
+                }
             }
         }
-           stage('check version') {
+        
+        stage('Check Version') {
             steps {
                 ansiColor('xterm') {
                     container("jenkins-agent") {
                         sh 'aws --version'
-                        sh "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 106036894611.dkr.ecr.eu-central-1.amazonaws.com
-                        sh "sudo usermod -a -G docker $USER"
-                        sh "docker ps"
-                        sh "docker images"
-                        sh "docker pull 106036894611.dkr.ecr.eu-central-1.amazonaws.com/eureka-server:latest"
-                  
-                 }
+                        sh 'aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 106036894611.dkr.ecr.eu-central-1.amazonaws.com'
+                        sh 'sudo usermod -a -G docker $USER'
+                        sh 'docker ps'
+                        sh 'docker images'
+                        sh 'docker pull 106036894611.dkr.ecr.eu-central-1.amazonaws.com/eureka-server:latest'
+                    }
+                }
             }
         }
-    }
 
         stage('Deploy to EKS Cluster') {
             steps {
-                ansiColor ('xterm') {
+                ansiColor('xterm') {
                     container("jenkins-agent") {
                         // Apply Kubernetes manifests
-                        sh "ls"
-                        sh "kubectl apply -f jenkins-cloudformation-deployment-example/deployment.yaml"
-                        sh "kubectl create deployment nginx --image=nginx"
-                        sh "kubectl expose deployment nginx --port=80 --type=NodePort"
+                        sh 'ls'
+                        sh 'kubectl apply -f jenkins-cloudformation-deployment-example/deployment.yaml'
+                        sh 'kubectl create deployment nginx --image=nginx'
+                        sh 'kubectl expose deployment nginx --port=80 --type=NodePort'
                     }
                 }
             }
