@@ -26,7 +26,7 @@ pipeline {
                     container("jenkins-agent") {
                         sh 'aws --version'
                         sh 'aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 106036894611.dkr.ecr.eu-central-1.amazonaws.com'
-                        sh 'sudo usermod -a -G docker $USER'
+                        sh 'sudo usermod -a -G docker admin'
                         sh 'docker ps'
                         sh 'docker images'
                         sh 'docker pull 106036894611.dkr.ecr.eu-central-1.amazonaws.com/eureka-server:latest'
